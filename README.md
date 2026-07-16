@@ -35,3 +35,8 @@ This project is ready to deploy cleanly as a static Vercel project:
    vercel
    ```
 3. Follow prompts to deploy instantly.
+
+## 🤝 Credits
+- **HTML & Structure**: Designed and built by Atul Sharma
+- **Development**: Created with AI-assisted coding
+- **Design System**: Premium neo-brutalist aesthetic with custom animations

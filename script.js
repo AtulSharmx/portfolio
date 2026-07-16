@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const chatChips = document.getElementById('chatChips');
 
   // Direct client-side Gemini API Integration
-  const _k = ['AQ.Ab8RN6L5nRK', '_jmlfuciIjwjo3', 'J01MZQPaw2YJ26', 'uFRPnhHSNNw'];
+  const _k = ['AQ.Ab8RN6Kee0O', 'NOu7QB5Pv9qVh', 'Dk-Z2swxPrm-U', 'AK0Etu5lOjCoQ'];
   const GEMINI_API_KEY = _k.join('');
   const GEMINI_MODEL = 'gemini-2.5-flash';
   const API_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
@@ -327,31 +327,19 @@ Hi, I'm Atul Sharma. I'm currently in my 2nd year of BCA (Data Science) at SGT U
         
         if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0]) {
           const aiReply = data.candidates[0].content.parts[0].text;
-          
-          // Save reply to history
-          chatHistory.push({
-            role: 'model',
-            parts: [{ text: aiReply }]
-          });
-          
+          chatHistory.push({ role: 'model', parts: [{ text: aiReply }] });
           appendMessage(aiReply);
         } else {
-          // If response is successful but format is unexpected
-          const fallback = getMockResponse(text);
-          chatHistory.push({
-            role: 'model',
-            parts: [{ text: fallback }]
-          });
-          appendMessage(fallback);
+          const msg = 'Hmm, got an empty response from the AI. Try again?';
+          chatHistory.push({ role: 'model', parts: [{ text: msg }] });
+          appendMessage(msg);
         }
       } else {
-        // HTTP Error (e.g. 403 Forbidden on denied projects) -> Fallback
-        const fallback = getMockResponse(text);
-        chatHistory.push({
-          role: 'model',
-          parts: [{ text: fallback }]
-        });
-        appendMessage(fallback);
+        const errData = await response.json().catch(() => ({}));
+        const errMsg = errData?.error?.message || `API error ${response.status}`;
+        console.error('Gemini API error:', response.status, errMsg);
+        const msg = `API error (${response.status}): ${errMsg}`;
+        appendMessage(msg);
       }
 
     } catch (err) {
